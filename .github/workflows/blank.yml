@@ -16,8 +16,11 @@ jobs:
         # see https://github.com/svenstaro/proxyboi/blob/master/.github/workflows/publish.yml.
       matrix:
         name: [
-          ubuntu-18-BUILDKIT,
           ubuntu-18-DOCKER,
+          ubuntu-18-BUILDKIT,
+          ubuntu-18-IMG,
+          ubuntu-18-BUILDAH,
+          ubuntu-18-KANIKO,
           macos-DOCKER
         ]
         
@@ -28,6 +31,7 @@ jobs:
             runversion: "BUILDKIT"
             DOITPROG: "echo"
             version: "1"
+            skiping: "0"
           
           - name: ubuntu-18-DOCKER
             env: ONLY_DOCKER=1
@@ -35,14 +39,41 @@ jobs:
             runversion: "DOCKER"
             DOITPROG: "echo"
             version: "2"
+            skiping: "1"
+
+          - name: ubuntu-18-IMG
+            env: ONLY_IMG=1
+            os: ubuntu-18.04
+            runversion: "IMG"
+            DOITPROG: "echo"
+            version: "3"
+            skiping: "0"            
           
+          - name: ubuntu-18-BUILDAH
+            env: ONLY_BUILDAH=1
+            os: ubuntu-18.04
+            runversion: "BUILDAH"
+            DOITPROG: "echo"
+            version: "4"
+            skiping: "0"
+
+          - name: ubuntu-18-KANIKO
+            env: ONLY_KANIKO=1
+            os: ubuntu-18.04
+            runversion: "KANIKO"
+            DOITPROG: "echo"
+            version: "5"
+            skiping: "0"
+
           - name: macos-DOCKER
             os: macos-latest
             runversion: "DOCKER"
             DOITPROG: "echo"
-            version: "3"
+            version: "6"
+            skiping: "1"
             
     steps:
+    if [ "${{ matrix.skiping }}" = "0" ]; then
       - uses: actions/checkout@v1
       - uses: srt32/git-actions@v0.0.3
         with: 
@@ -74,7 +105,10 @@ jobs:
         run: touch foo-cmake-build-DREPROC_SANITIZERS=ON
 
       - name: Build
-        run: ./buildbench ./examples/ex01 out.csv 5
+        run: |
+          export ONLY_${{ matrix.runversion }}=1
+          export DOITPROG=${{ matrix.DOITPROG }}
+          ./buildbench ./examples/ex01 out.csv 5
 
       # Aside from running the tests we also make sure the examples don't
       # crash or return a non-zero exit code.
@@ -89,4 +123,6 @@ jobs:
           ls -latr build/reproc++/examples/background cmake --help > /dev/null
           ls -latr build/reproc++/examples/cmake-help > /dev/null
           ls -latr build/reproc++/examples/forward cmake --help > /dev/null
-
+     else
+       name: SKIP
+     fi
