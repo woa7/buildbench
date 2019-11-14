@@ -11,12 +11,17 @@ jobs:
       #env: ONLY_DOCKER=1
     steps:
     - uses: actions/checkout@v1
+    - name: git Actions
+      uses: srt32/git-actions@v0.0.3
+          args = "git submodule update --init --recursive"
     - name: Run a one-line script
       run: echo Hello, ONLY_DOCKER world!
     - name: Run a multi-line script
-      run: |
+      run: |        
         cd $GITHUB_WORKSPACE
-        ONLY_DOCKER=1 ./buildbench ./examples/ex01 out.csv 5
+        export DOITPROG=echo
+        export ONLY_DOCKER=1
+        ./buildbench ./examples/ex01 out.csv 5
 
   ONLY_BUILDKIT:
     runs-on: ${{ matrix.os }}
@@ -26,11 +31,15 @@ jobs:
       #env: ONLY_BUILDKIT=1
     steps:
     - uses: actions/checkout@v1
+    - name: git Actions
+      uses: srt32/git-actions@v0.0.3
+          args = "git submodule update --init --recursive"
     - name: Run a one-line script
       run: echo Hello, ONLY_BUILDKIT world!
     - name: Run a multi-line script
       run: |
         cd $GITHUB_WORKSPACE
+        export DOITPROG=echo
         DOITPROG=echo ONLY_BUILDKIT=1 ./buildbench ./examples/ex01 out.csv 5
 
   ONLY_IMG:
@@ -41,6 +50,9 @@ jobs:
       #env: ONLY_IMG=1
     steps:
     - uses: actions/checkout@v1
+    - name: git Actions
+      uses: srt32/git-actions@v0.0.3
+          args = "git submodule update --init --recursive"
     - name: Run a one-line script
       run: echo Hello, ONLY_IMG world!
     - name: Run a multi-line script
@@ -48,7 +60,9 @@ jobs:
         ls -latr
         echo $GITHUB_WORKSPACE
         cd $GITHUB_WORKSPACE
-        DOITPROG=echo ONLY_IMG=1 ./buildbench ./examples/ex01 out.csv 5
+        export DOITPROG=echo
+        export ONLY_IMG=1
+        ./buildbench ./examples/ex01 out.csv 5
         ls -latr
 
   ONLY_BUILDAH:
@@ -59,11 +73,15 @@ jobs:
       #env: ONLY_BUILDAH=1
     steps:
     - uses: actions/checkout@v1
+    - name: git Actions
+      uses: srt32/git-actions@v0.0.3
+          args = "git submodule update --init --recursive"
     - name: Run a one-line script
       run: echo Hello, ONLY_BUILDAH world!
     - name: Run a multi-line script
       run: |
-        DOITPROG=echo ONLY_BUILDAH=1 ./buildbench ./examples/ex01 out.csv 5
+        export DOITPROG=echo
+        export ONLY_BUILDAH=1 && ./buildbench ./examples/ex01 out.csv 5
         
   ONLY_KANIKO:
     runs-on: ${{ matrix.os }}
@@ -73,9 +91,13 @@ jobs:
       #env: ONLY_KANIKO=1
     steps:
     - uses: actions/checkout@v1
+    - name: git Actions
+      uses: srt32/git-actions@v0.0.3
+          args = "git submodule update --init --recursive"
     - name: Run a one-line script
       run: echo Hello, ONLY_KANIKO world!
     - name: Run a multi-line script
       run: |
-        DOITPROG=echo ONLY_KANIKO=1 ./buildbench ./examples/ex01 out.csv 5
-                
+        export DOITPROG=echo
+        export ONLY_KANIKO=1 
+        ./buildbench ./examples/ex01 out.csv 5
