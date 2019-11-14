@@ -1,5 +1,18 @@
 name: CI
 
+uses: srt32/git-actions@v1
+  args = "git submodule update --init --recursive"
+  
+
+  action "git command" {
+    uses = "srt32/git-actions@v0.0.3"
+    args = "git status"
+    }
+  action "git-update-submodule" {
+    uses = "srt32/git-actions@v0.0.3"
+    args = "git submodule update --init --recursive"
+    }
+
 on: [push]
 
 jobs:
@@ -44,10 +57,7 @@ jobs:
             
     steps:
       - uses: actions/checkout@v1
-      - name: git Actions
-        uses: srt32/git-actions@v0.0.3
-          args = "git submodule update --init --recursive"
-
+      - uses: git-update-submodule
       - name: Install (Linux)
         if: runner.os == 'Linux'
         run: |
