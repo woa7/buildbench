@@ -6,9 +6,9 @@ jobs:
   ONLY_DOCKER:
     runs-on: ${{ matrix.os }}
     strategy:
-    matrix:
+     matrix:
       os: [macos-latest, windows-latest, ubuntu-16.04, ubuntu-18.04]
-      env: ONLY_DOCKER=1
+      #env: ONLY_DOCKER=1
     steps:
     - uses: actions/checkout@v1
     - name: Run a one-line script
@@ -20,9 +20,9 @@ jobs:
   ONLY_BUILDKIT:
     runs-on: ${{ matrix.os }}
     strategy:
-    matrix:
+     matrix:
       os: [macos-latest, windows-latest, ubuntu-16.04, ubuntu-18.04]
-      env: ONLY_BUILDKIT=1
+      #env: ONLY_BUILDKIT=1
     steps:
     - uses: actions/checkout@v1
     - name: Run a one-line script
@@ -34,9 +34,9 @@ jobs:
   ONLY_IMG:
     runs-on: ${{ matrix.os }}
     strategy:
-    matrix:
+     matrix:
       os: [macos-latest, windows-latest, ubuntu-16.04, ubuntu-18.04]
-      env: ONLY_IMG=1
+      #env: ONLY_IMG=1
     steps:
     - uses: actions/checkout@v1
     - name: Run a one-line script
@@ -48,9 +48,9 @@ jobs:
   ONLY_BUILDAH:
     runs-on: ${{ matrix.os }}
     strategy:
-    matrix:
+     matrix:
       os: [macos-latest, windows-latest, ubuntu-16.04, ubuntu-18.04]
-      env: ONLY_BUILDAH=1
+      #env: ONLY_BUILDAH=1
     steps:
     - uses: actions/checkout@v1
     - name: Run a one-line script
@@ -62,9 +62,9 @@ jobs:
   ONLY_KANIKO:
     runs-on: ${{ matrix.os }}
     strategy:
-    matrix:
+     matrix:
       os: [macos-latest, windows-latest, ubuntu-16.04, ubuntu-18.04]
-      env: ONLY_KANIKO=1
+      #env: ONLY_KANIKO=1
     steps:
     - uses: actions/checkout@v1
     - name: Run a one-line script
