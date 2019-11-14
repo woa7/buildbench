@@ -31,7 +31,7 @@ jobs:
     - name: Run a multi-line script
       run: |
         cd $GITHUB_WORKSPACE
-        ONLY_BUILDKIT=1 ./buildbench ./examples/ex01 out.csv 5
+        DOITPROG=echo ONLY_BUILDKIT=1 ./buildbench ./examples/ex01 out.csv 5
 
   ONLY_IMG:
     runs-on: ${{ matrix.os }}
@@ -48,7 +48,7 @@ jobs:
         ls -latr
         echo $GITHUB_WORKSPACE
         cd $GITHUB_WORKSPACE
-        ONLY_IMG=1 ./buildbench ./examples/ex01 out.csv 5
+        DOITPROG=echo ONLY_IMG=1 ./buildbench ./examples/ex01 out.csv 5
         ls -latr
 
   ONLY_BUILDAH:
@@ -63,7 +63,7 @@ jobs:
       run: echo Hello, ONLY_BUILDAH world!
     - name: Run a multi-line script
       run: |
-        ONLY_BUILDAH=1 ./buildbench ./examples/ex01 out.csv 5
+        DOITPROG=echo ONLY_BUILDAH=1 ./buildbench ./examples/ex01 out.csv 5
         
   ONLY_KANIKO:
     runs-on: ${{ matrix.os }}
@@ -77,5 +77,5 @@ jobs:
       run: echo Hello, ONLY_KANIKO world!
     - name: Run a multi-line script
       run: |
-        cd $GITHUB_WORKSPACE && ONLY_KANIKO=1 ./buildbench ./examples/ex01 out.csv 5
+        DOITPROG=echo ONLY_KANIKO=1 ./buildbench ./examples/ex01 out.csv 5
                 
