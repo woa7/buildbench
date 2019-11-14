@@ -15,6 +15,7 @@ jobs:
       run: echo Hello, ONLY_DOCKER world!
     - name: Run a multi-line script
       run: |
+        cd buildbench
         ./buildbench ./examples/ex01 out.csv 5 ONLY_DOCKER=1
 
   ONLY_BUILDKIT:
@@ -29,6 +30,7 @@ jobs:
       run: echo Hello, ONLY_BUILDKIT world!
     - name: Run a multi-line script
       run: |
+        cd buildbench
         ./buildbench ./examples/ex01 out.csv 5 ONLY_BUILDKIT=1
 
   ONLY_IMG:
@@ -43,6 +45,7 @@ jobs:
       run: echo Hello, ONLY_IMG world!
     - name: Run a multi-line script
       run: |
+        cd buildbench
         ./buildbench ./examples/ex01 out.csv 5 ONLY_IMG=1
 
   ONLY_BUILDAH:
@@ -57,6 +60,7 @@ jobs:
       run: echo Hello, ONLY_BUILDAH world!
     - name: Run a multi-line script
       run: |
+        cd buildbench
         ./buildbench ./examples/ex01 out.csv 5 ONLY_BUILDAH=1
         
   ONLY_KANIKO:
@@ -71,5 +75,6 @@ jobs:
       run: echo Hello, ONLY_KANIKO world!
     - name: Run a multi-line script
       run: |
+        cd buildbench
         ./buildbench ./examples/ex01 out.csv 5 ONLY_KANIKO=1
                 
