@@ -45,7 +45,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: srt32/git-actions@v0.0.3
-      - uses: git-update-submodule
       - name: Install (Linux)
         if: runner.os == 'Linux'
         run: |
