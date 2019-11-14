@@ -73,57 +73,57 @@ jobs:
             skiping: "1"
             
     steps:
-     if [ "${{ matrix.skiping }}" = "0" ]; then
-      - uses: actions/checkout@v1
-      - uses: srt32/git-actions@v0.0.3
-        with: 
-          args: "git submodule update --init --recursive"
-      - name: Install (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          #curl -sSL https://github.com/Kitware/CMake/releases/download/v3.13.5/cmake-3.13.5-Linux-x86_64.tar.gz -o cmake.tar.gz
-          #sudo tar xf cmake.tar.gz --strip 1 -C /usr/local
-          # LLVM 9 is not yet in Bionic's repositories.
-          #sudo add-apt-repository "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-9 main"
-          sudo apt-get update
-          sudo apt-get install -y bc
-          if [ "${{ matrix.runversion }}" = "DOCKER" ]; then
-            echo YES DOCKER ONLY ${{ matrix.runversion }} , DOITPROG is ${{ matrix.DOITPROG }}
-            echo "::set-env name=CC::gcc-${{ matrix.version }}"
-            echo "::set-env name=CXX::g++-${{ matrix.version }}"
-          else
-            echo NO DOCKER ONLY ${{ matrix.runversion }} , DOITPROG is ${{ matrix.DOITPROG }}
-            echo "::set-env name=CC::clang-${{ matrix.version }}"
-            echo "::set-env name=CXX::clang++-${{ matrix.version }}"
-          fi
-      
-      # YAML folded multiline strings ('>') require the same indentation for all
-      # lines in order to turn newlines into spaces.
-      
-      - name: Foo Configure Sanitizers (Linux && macOS)
-        if: runner.os == 'Linux' || runner.os == 'macOS'
-        run: touch foo-cmake-build-DREPROC_SANITIZERS=ON
+      if [ "${{ matrix.skiping }}" = "0" ]; then
+        - uses: actions/checkout@v1
+        - uses: srt32/git-actions@v0.0.3
+          with: 
+            args: "git submodule update --init --recursive"
+        - name: Install (Linux)
+          if: runner.os == 'Linux'
+          run: |
+            #curl -sSL https://github.com/Kitware/CMake/releases/download/v3.13.5/cmake-3.13.5-Linux-x86_64.tar.gz -o cmake.tar.gz
+            #sudo tar xf cmake.tar.gz --strip 1 -C /usr/local
+            # LLVM 9 is not yet in Bionic's repositories.
+            #sudo add-apt-repository "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-9 main"
+            sudo apt-get update
+            sudo apt-get install -y bc
+            if [ "${{ matrix.runversion }}" = "DOCKER" ]; then
+              echo YES DOCKER ONLY ${{ matrix.runversion }} , DOITPROG is ${{ matrix.DOITPROG }}
+              echo "::set-env name=CC::gcc-${{ matrix.version }}"
+              echo "::set-env name=CXX::g++-${{ matrix.version }}"
+            else
+              echo NO DOCKER ONLY ${{ matrix.runversion }} , DOITPROG is ${{ matrix.DOITPROG }}
+              echo "::set-env name=CC::clang-${{ matrix.version }}"
+              echo "::set-env name=CXX::clang++-${{ matrix.version }}"
+            fi
+        
+        # YAML folded multiline strings ('>') require the same indentation for all
+        # lines in order to turn newlines into spaces.
+        
+        - name: Foo Configure Sanitizers (Linux && macOS)
+          if: runner.os == 'Linux' || runner.os == 'macOS'
+          run: touch foo-cmake-build-DREPROC_SANITIZERS=ON
 
-      - name: Build
-        run: |
-          export ONLY_${{ matrix.runversion }}=1
-          export DOITPROG=${{ matrix.DOITPROG }}
-          ./buildbench ./examples/ex01 out.csv 5
+        - name: Build
+          run: |
+            export ONLY_${{ matrix.runversion }}=1
+            export DOITPROG=${{ matrix.DOITPROG }}
+            ./buildbench ./examples/ex01 out.csv 5
 
-      # Aside from running the tests we also make sure the examples don't
-      # crash or return a non-zero exit code.
+        # Aside from running the tests we also make sure the examples don't
+        # crash or return a non-zero exit code.
 
-      - name: Test
-        shell: bash
-        run: |
-          ls -latr build/test
-          ls -latr build/reproc/examples/drain > /dev/null
-          ls -latr build/reproc/examples/git-status > /dev/null
-          ls -latr build/reproc/examples/inherit cmake --help > /dev/null
-          ls -latr build/reproc++/examples/background cmake --help > /dev/null
-          ls -latr build/reproc++/examples/cmake-help > /dev/null
-          ls -latr build/reproc++/examples/forward cmake --help > /dev/null
-     else
-       - name: SKIPPED
-	     run: echo SKIPPED
-     fi
+        - name: Test
+          shell: bash
+          run: |
+            ls -latr build/test
+            ls -latr build/reproc/examples/drain > /dev/null
+            ls -latr build/reproc/examples/git-status > /dev/null
+            ls -latr build/reproc/examples/inherit cmake --help > /dev/null
+            ls -latr build/reproc++/examples/background cmake --help > /dev/null
+            ls -latr build/reproc++/examples/cmake-help > /dev/null
+            ls -latr build/reproc++/examples/forward cmake --help > /dev/null
+      else
+        - name: SKIPPED
+  	    run: echo SKIPPED
+      fi
