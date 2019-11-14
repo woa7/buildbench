@@ -1,21 +1,85 @@
 name: CI
 
 on: [push]
-    #name: ${{ matrix.name }}
-    #runs-on: ${{ matrix.os }}
+
+jobs:
+  ci:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
     strategy:
       fail-fast: false
-if: runner.os == 'Linux'
+      
+        # Github Actions requires a single row to be added to the build matrix.
+        # See https://help.github.com/en/articles/workflow-syntax-for-github-actions.
+        # see https://github.com/DaanDeMeyer/reproc/blob/master/.github/workflows/main.yml
+        # see https://github.community/t5/GitHub-Actions/GitHub-Actions-Matrix-options-dont-work-as-documented/td-p/29558
+        # see https://github.com/svenstaro/proxyboi/blob/master/.github/workflows/publish.yml #      
+      
+      matrix:
+        name:[
+        ubuntu-18-BUILDKIT,
+        ubuntu-18-DOCKER,
+        macos-DOCKER
+        ]
+        
+        include:
+          - name: ubuntu-18-BUILDKIT
+            env: ONLY_BUILDKIT=1
+            os: ubuntu-18.04
+            runversion: "BUILDKIT"
+            DOITPROG: "echo"
+            version: "1"
+          
+          - name: ubuntu-18-DOCKER
+            env: ONLY_DOCKER=1
+            os: ubuntu-18.04
+            runversion: "DOCKER"
+            DOITPROG: "echo"
+            version: "2"
+          
+          - name: macos-DOCKER
+            os: macos-latest
+            runversion: "DOCKER"
+            DOITPROG: "echo"
+            version: "3"
+            
+    steps:
+    - uses: actions/checkout@v1
+            
+      - name: Install (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          #curl -sSL https://github.com/Kitware/CMake/releases/download/v3.13.5/cmake-3.13.5-Linux-x86_64.tar.gz -o cmake.tar.gz
+          #sudo tar xf cmake.tar.gz --strip 1 -C /usr/local
+          # LLVM 9 is not yet in Bionic's repositories.
+          #sudo add-apt-repository "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-9 main"
+          sudo apt-get update
+          sudo apt-get install -y nc
+          if [ "${{ matrix.runversion }}" = "DOCKER" ]; then
+            echo YES DOCKER ONLY ${{ matrix.runversion }} , DOITPROG is ${{ matrix.DOITPROG }}
+            echo "::set-env name=CC::gcc-${{ matrix.version }}"
+            echo "::set-env name=CXX::g++-${{ matrix.version }}"
+          else
+            echo NO DOCKER ONLY ${{ matrix.runversion }} , DOITPROG is ${{ matrix.DOITPROG }}
+            echo "::set-env name=CC::clang-${{ matrix.version }}"
+            echo "::set-env name=CXX::clang++-${{ matrix.version }}"
+          fi
+      
+      # YAML folded multiline strings ('>') require the same indentation for all
+      # lines in order to turn newlines into spaces.
+      
+        - name: Foo Configure Sanitizers (Linux && macOS)
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+        run: touch foo-cmake-build-DREPROC_SANITIZERS=ON
+
+      - name: Build
+        run: ./buildbench ./examples/ex01 out.csv 5
+        
+      if: runner.os == 'Linux'
         run: |
           apt-get update
           apt-get install bc
-jobs:
-  ONLY_DOCKER:
-    runs-on: ${{ matrix.os }}
-    strategy:
-     matrix:
-      os: [macos-latest, windows-latest, ubuntu-16.04, ubuntu-18.04]
-    steps:
     - uses: actions/checkout@v1
     - name: git Actions
       uses: srt32/git-actions@v0.0.3
@@ -29,81 +93,18 @@ jobs:
         export ONLY_DOCKER=1
         ./buildbench ./examples/ex01 out.csv 5
 
-  ONLY_BUILDKIT:
-    runs-on: ${{ matrix.os }}
-    strategy:
-     matrix:
-      os: [macos-latest, windows-latest, ubuntu-16.04, ubuntu-18.04]
-      #env: ONLY_BUILDKIT=1
-    steps:
-    - uses: actions/checkout@v1
-    - name: git Actions
-      uses: srt32/git-actions@v0.0.3
-          args = "git submodule update --init --recursive"
-    - name: Run a one-line script
-      run: echo Hello, ONLY_BUILDKIT world!
-    - name: Run a multi-line script
-      run: |
-        cd $GITHUB_WORKSPACE
-        export DOITPROG=echo
-        DOITPROG=echo ONLY_BUILDKIT=1 ./buildbench ./examples/ex01 out.csv 5
+      # Aside from running the tests we also make sure the examples don't
+      # crash or return a non-zero exit code.
 
-  ONLY_IMG:
-    runs-on: ${{ matrix.os }}
-    strategy:
-     matrix:
-      os: [macos-latest, windows-latest, ubuntu-16.04, ubuntu-18.04]
-      #env: ONLY_IMG=1
-    steps:
-    - uses: actions/checkout@v1
-    - name: git Actions
-      uses: srt32/git-actions@v0.0.3
-          args = "git submodule update --init --recursive"
-    - name: Run a one-line script
-      run: echo Hello, ONLY_IMG world!
-    - name: Run a multi-line script
-      run: |
-        ls -latr
-        echo $GITHUB_WORKSPACE
-        cd $GITHUB_WORKSPACE
-        export DOITPROG=echo
-        export ONLY_IMG=1
-        ./buildbench ./examples/ex01 out.csv 5
-        ls -latr
+      - name: Test
+        shell: bash
+        run: |
+          build/test
+          build/reproc/examples/drain > /dev/null
+          build/reproc/examples/git-status > /dev/null
+          build/reproc/examples/inherit cmake --help > /dev/null
+          build/reproc++/examples/background cmake --help > /dev/null
+          build/reproc++/examples/cmake-help > /dev/null
+          build/reproc++/examples/forward cmake --help > /dev/null
 
-  ONLY_BUILDAH:
-    runs-on: ${{ matrix.os }}
-    strategy:
-     matrix:
-      os: [macos-latest, windows-latest, ubuntu-16.04, ubuntu-18.04]
-      #env: ONLY_BUILDAH=1
-    steps:
-    - uses: actions/checkout@v1
-    - name: git Actions
-      uses: srt32/git-actions@v0.0.3
-          args = "git submodule update --init --recursive"
-    - name: Run a one-line script
-      run: echo Hello, ONLY_BUILDAH world!
-    - name: Run a multi-line script
-      run: |
-        export DOITPROG=echo
-        export ONLY_BUILDAH=1 && ./buildbench ./examples/ex01 out.csv 5
-        
-  ONLY_KANIKO:
-    runs-on: ${{ matrix.os }}
-    strategy:
-     matrix:
-      os: [macos-latest, windows-latest, ubuntu-16.04, ubuntu-18.04]
-      #env: ONLY_KANIKO=1
-    steps:
-    - uses: actions/checkout@v1
-    - name: git Actions
-      uses: srt32/git-actions@v0.0.3
-          args = "git submodule update --init --recursive"
-    - name: Run a one-line script
-      run: echo Hello, ONLY_KANIKO world!
-    - name: Run a multi-line script
-      run: |
-        export DOITPROG=echo
-        export ONLY_KANIKO=1 
-        ./buildbench ./examples/ex01 out.csv 5
+ 
