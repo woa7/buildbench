@@ -193,6 +193,9 @@ function kaniko::prune(){
 ### Main
 if [ "$#" -ne 3 ]; then
     echo "Usage: $0 DIR CSV N"
+	echo "$0 ./examples/ex01 out.csv 5DIR CSV N"
+	echo "or with"
+	echo "[ONLY_DOCKER=1 | ONLY_BUILDKIT=1 | ONLY_IMG=1 | ONLY_BUILDAH=1 | ONLY_KANIKO=1] $0 ./examples/ex01 out.csv 5DIR CSV N"
     exit 1
 fi
 DIR=$(realpath "$1")
