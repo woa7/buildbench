@@ -124,6 +124,5 @@ jobs:
           ls -latr build/reproc++/examples/cmake-help > /dev/null
           ls -latr build/reproc++/examples/forward cmake --help > /dev/null
      else
-       name: SKIP and print ENV
-         env
+       name: SKIP
      fi
