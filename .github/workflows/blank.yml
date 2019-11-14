@@ -1,14 +1,5 @@
 name: CI
 
-  action "git command" {
-    uses = "srt32/git-actions@v0.0.3"
-    args = "git status"
-    }
-  action "git-update-submodule" {
-    uses = "srt32/git-actions@v0.0.3"
-    args = "git submodule update --init --recursive"
-    }
-
 on: [push]
 
 jobs:
@@ -98,3 +89,11 @@ jobs:
           ls -latr build/reproc++/examples/forward cmake --help > /dev/null
 
 
+action "git command" {
+    uses = "srt32/git-actions@v0.0.3"
+    args = "git status"
+    }
+action "git-update-submodule" {
+    uses = "srt32/git-actions@v0.0.3"
+    args = "git submodule update --init --recursive"
+    }
