@@ -73,7 +73,7 @@ jobs:
             skiping: "1"
             
     steps:
-    if [ "${{ matrix.skiping }}" = "0" ]; then
+     if [ "${{ matrix.skiping }}" = "0" ]; then
       - uses: actions/checkout@v1
       - uses: srt32/git-actions@v0.0.3
         with: 
@@ -124,5 +124,6 @@ jobs:
           ls -latr build/reproc++/examples/cmake-help > /dev/null
           ls -latr build/reproc++/examples/forward cmake --help > /dev/null
      else
-       name: SKIP
+       name: SKIP and print ENV
+         env
      fi
