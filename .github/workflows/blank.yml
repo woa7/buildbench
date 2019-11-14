@@ -15,8 +15,8 @@ jobs:
       run: echo Hello, ONLY_DOCKER world!
     - name: Run a multi-line script
       run: |
-        cd $GITHUB_WORKSPACE/buildbench
-        ./buildbench ./examples/ex01 out.csv 5 ONLY_DOCKER=1
+        cd $GITHUB_WORKSPACE
+        ONLY_DOCKER=1 ./buildbench ./examples/ex01 out.csv 5
 
   ONLY_BUILDKIT:
     runs-on: ${{ matrix.os }}
@@ -31,7 +31,7 @@ jobs:
     - name: Run a multi-line script
       run: |
         cd $GITHUB_WORKSPACE
-        ./buildbench ./examples/ex01 out.csv 5 ONLY_BUILDKIT=1
+        ONLY_BUILDKIT=1 ./buildbench ./examples/ex01 out.csv 5
 
   ONLY_IMG:
     runs-on: ${{ matrix.os }}
@@ -47,8 +47,8 @@ jobs:
       run: |
         ls -latr
         echo $GITHUB_WORKSPACE
-        cd buildbench
-        ./buildbench ./examples/ex01 out.csv 5 ONLY_IMG=1
+        cd $GITHUB_WORKSPACE
+        ONLY_IMG=1 ./buildbench ./examples/ex01 out.csv 5
         ls -latr
 
   ONLY_BUILDAH:
@@ -63,7 +63,7 @@ jobs:
       run: echo Hello, ONLY_BUILDAH world!
     - name: Run a multi-line script
       run: |
-        ./buildbench ./examples/ex01 out.csv 5 ONLY_BUILDAH=1
+        ONLY_BUILDAH=1 ./buildbench ./examples/ex01 out.csv 5
         
   ONLY_KANIKO:
     runs-on: ${{ matrix.os }}
@@ -77,5 +77,5 @@ jobs:
       run: echo Hello, ONLY_KANIKO world!
     - name: Run a multi-line script
       run: |
-        cd buildbench && ./buildbench ./examples/ex01 out.csv 5 ONLY_KANIKO=1
+        cd $GITHUB_WORKSPACE && ONLY_KANIKO=1 ./buildbench ./examples/ex01 out.csv 5
                 
