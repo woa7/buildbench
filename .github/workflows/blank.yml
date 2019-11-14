@@ -1,0 +1,75 @@
+name: CI
+
+on: [push]
+
+jobs:
+  ONLY_DOCKER:
+    runs-on: ${{ matrix.os }}
+    strategy:
+    matrix:
+      os: [macos-latest, windows-latest, ubuntu-16.04, ubuntu-18.04]
+      env: ONLY_DOCKER=1
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run a one-line script
+      run: echo Hello, ${{ ONLY_DOCKER }} world!
+    - name: Run a multi-line script
+      run: |
+        ./buildbench ./examples/ex01 out.csv 5 ONLY_DOCKER=1
+
+  ONLY_BUILDKIT:
+    runs-on: ${{ matrix.os }}
+    strategy:
+    matrix:
+      os: [macos-latest, windows-latest, ubuntu-16.04, ubuntu-18.04]
+      env: ONLY_BUILDKIT=1
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run a one-line script
+      run: echo Hello, ${{ ONLY_BUILDKIT }} world!
+    - name: Run a multi-line script
+      run: |
+        ./buildbench ./examples/ex01 out.csv 5 ONLY_BUILDKIT=1
+
+  ONLY_IMG:
+    runs-on: ${{ matrix.os }}
+    strategy:
+    matrix:
+      os: [macos-latest, windows-latest, ubuntu-16.04, ubuntu-18.04]
+      env: ONLY_IMG=1
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run a one-line script
+      run: echo Hello, ${{ ONLY_IMG }} world!
+    - name: Run a multi-line script
+      run: |
+        ./buildbench ./examples/ex01 out.csv 5 ONLY_IMG=1
+
+  ONLY_BUILDAH:
+    runs-on: ${{ matrix.os }}
+    strategy:
+    matrix:
+      os: [macos-latest, windows-latest, ubuntu-16.04, ubuntu-18.04]
+      env: ONLY_BUILDAH=1
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run a one-line script
+      run: echo Hello, ${{ ONLY_BUILDAH }} world!
+    - name: Run a multi-line script
+      run: |
+        ./buildbench ./examples/ex01 out.csv 5 ONLY_BUILDAH=1
+        
+  ONLY_KANIKO:
+    runs-on: ${{ matrix.os }}
+    strategy:
+    matrix:
+      os: [macos-latest, windows-latest, ubuntu-16.04, ubuntu-18.04]
+      env: ONLY_KANIKO=1
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run a one-line script
+      run: echo Hello, ${{ ONLY_KANIKO }} world!
+    - name: Run a multi-line script
+      run: |
+        ./buildbench ./examples/ex01 out.csv 5 ONLY_KANIKO=1
+                
