@@ -11,14 +11,14 @@ jobs:
       fail-fast: false
         # Github Actions requires a single row to be added to the build matrix.
         # See https://help.github.com/en/articles/workflow-syntax-for-github-actions.
-        # see https://github.com/DaanDeMeyer/reproc/blob/master/.github/workflows/main.yml
-        # see https://github.community/t5/GitHub-Actions/GitHub-Actions-Matrix-options-dont-work-as-documented/td-p/29558
-        # see https://github.com/svenstaro/proxyboi/blob/master/.github/workflows/publish.yml #      
+        # see https://github.com/DaanDeMeyer/reproc/blob/master/.github/workflows/main.yml.
+        # see https://github.community/t5/GitHub-Actions/GitHub-Actions-Matrix-options-dont-work-as-documented/td-p/29558.
+        # see https://github.com/svenstaro/proxyboi/blob/master/.github/workflows/publish.yml.
       matrix:
-        name:[
-         ubuntu-18-BUILDKIT,
-         ubuntu-18-DOCKER,
-         macos-DOCKER
+        name: [
+          ubuntu-18-BUILDKIT,
+          ubuntu-18-DOCKER,
+          macos-DOCKER
         ]
         
         include:
