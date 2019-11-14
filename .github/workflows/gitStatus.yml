@@ -1,0 +1,13 @@
+workflow "My build" {
+  resolves = [
+    "git command",
+  ]
+  on = "push"
+}
+
+# see https://github.com/srt32/git-actions
+
+action "git command" {
+  uses = "srt32/git-actions@v0.0.3"
+  args = "git status"
+}
