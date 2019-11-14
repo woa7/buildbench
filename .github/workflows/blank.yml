@@ -12,7 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Run a one-line script
-      run: echo Hello, ${{ ONLY_DOCKER }} world!
+      run: echo Hello, ONLY_DOCKER world!
     - name: Run a multi-line script
       run: |
         ./buildbench ./examples/ex01 out.csv 5 ONLY_DOCKER=1
@@ -26,7 +26,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Run a one-line script
-      run: echo Hello, ${{ ONLY_BUILDKIT }} world!
+      run: echo Hello, ONLY_BUILDKIT world!
     - name: Run a multi-line script
       run: |
         ./buildbench ./examples/ex01 out.csv 5 ONLY_BUILDKIT=1
@@ -40,7 +40,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Run a one-line script
-      run: echo Hello, ${{ ONLY_IMG }} world!
+      run: echo Hello, ONLY_IMG world!
     - name: Run a multi-line script
       run: |
         ./buildbench ./examples/ex01 out.csv 5 ONLY_IMG=1
@@ -54,7 +54,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Run a one-line script
-      run: echo Hello, ${{ ONLY_BUILDAH }} world!
+      run: echo Hello, ONLY_BUILDAH world!
     - name: Run a multi-line script
       run: |
         ./buildbench ./examples/ex01 out.csv 5 ONLY_BUILDAH=1
@@ -68,7 +68,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Run a one-line script
-      run: echo Hello, ${{ ONLY_KANIKO }} world!
+      run: echo Hello, ONLY_KANIKO world!
     - name: Run a multi-line script
       run: |
         ./buildbench ./examples/ex01 out.csv 5 ONLY_KANIKO=1
