@@ -53,7 +53,7 @@ jobs:
           # LLVM 9 is not yet in Bionic's repositories.
           #sudo add-apt-repository "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-9 main"
           sudo apt-get update
-          sudo apt-get install -y nc
+          sudo apt-get install -y bc
           if [ "${{ matrix.runversion }}" = "DOCKER" ]; then
             echo YES DOCKER ONLY ${{ matrix.runversion }} , DOITPROG is ${{ matrix.DOITPROG }}
             echo "::set-env name=CC::gcc-${{ matrix.version }}"
