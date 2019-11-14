@@ -1,0 +1,8 @@
+#!/bin/bash
+set
+env
+ls -latr
+docker build --build-arg -f $DOCKERFILE_PATH -t $IMAGE_NAME .
+# see https://docs.docker.com/docker-hub/builds/advanced/#custom-build-phase-hooks
+# docker build --build-arg CUSTOM=$VAR -f $DOCKERFILE_PATH -t $IMAGE_NAME .
+# docker build --build-arg DOCKER_TAG=$DOCKER_TAG -f $DOCKERFILE_PATH -t $IMAGE_NAME .
