@@ -45,6 +45,8 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: srt32/git-actions@v0.0.3
+        with: 
+          args: "git submodule update --init --recursive"
       - name: Install (Linux)
         if: runner.os == 'Linux'
         run: |
