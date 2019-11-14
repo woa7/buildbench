@@ -16,6 +16,14 @@ else
   doit_exec=$doit
 fi
 
+E_RUNERR=65
+
+# Check if md5sum and bc are installed. 
+if ! which bc &> /dev/null; then
+   echo bc is not installed.  
+   echo "Can\'t run . . . "
+   exit $E_RUNERR
+fi
 
 ### Constants
 # April 11, 2019
