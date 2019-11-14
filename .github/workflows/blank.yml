@@ -1,9 +1,5 @@
 name: CI
 
-uses: srt32/git-actions@v1
-  args = "git submodule update --init --recursive"
-  
-
   action "git command" {
     uses = "srt32/git-actions@v0.0.3"
     args = "git status"
