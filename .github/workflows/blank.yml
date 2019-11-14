@@ -124,5 +124,6 @@ jobs:
           ls -latr build/reproc++/examples/cmake-help > /dev/null
           ls -latr build/reproc++/examples/forward cmake --help > /dev/null
      else
-       name: SKIP
+       steps:
+       - name: SKIPPED
      fi
