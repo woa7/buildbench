@@ -6,13 +6,13 @@
 extends: default
 
 rules:
-  document-end: enable
+  document-end:
     level: warning
-  empty-values: enable
+  empty-values:
     level: warning
-  key-ordering: enable
+  key-ordering:
     level: warning
-  octal-values: enable
+  octal-values:
     level: warning
-  quoted-strings: enable
+  quoted-strings:
     level: warning
