@@ -1,3 +1,17 @@
+---
 # see https://yamllint.readthedocs.io/en/stab
 # https://github.com/adrienverge/ya
 # and https://github.com/ibiqlik/action-yamllint
+
+extends: default
+  document-end: enable
+    level: warning
+  empty-values: enable
+    level: warning
+  key-ordering: enable
+    level: warning
+  octal-values: enable
+    level: warning
+  quoted-strings: enable
+    level: warning
+...
