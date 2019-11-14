@@ -1,9 +1,11 @@
----
+######################################
 # see https://yamllint.readthedocs.io/en/stab
 # https://github.com/adrienverge/ya
 # and https://github.com/ibiqlik/action-yamllint
 
 extends: default
+
+rules:
   document-end: enable
     level: warning
   empty-values: enable
@@ -14,4 +16,3 @@ extends: default
     level: warning
   quoted-strings: enable
     level: warning
-...
