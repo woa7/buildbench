@@ -1,0 +1,3 @@
+[submodule "realpath-sh"]
+	path = realpath-sh
+	url = https://github.com/mkropat/sh-realpath.git
