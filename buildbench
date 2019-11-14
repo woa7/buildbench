@@ -5,6 +5,18 @@ set -eu -o pipefail
 export LANG=C LC_ALL=C
 cd $(dirname $0)
 
+#DOITPROG=echo
+
+# set DOITPROG to echo to test this script
+# Don't use :- since 4.3BSD and earlier shells don't like it.
+doit=${DOITPROG-}
+if test -z "$doit"; then
+  doit_exec=exec
+else
+  doit_exec=$doit
+fi
+
+
 ### Constants
 # April 11, 2019
 DOCKER_IMAGE="docker:18.09-dind"
@@ -69,39 +81,39 @@ function bb::test(){
 
 ### Docker
 function docker::init(){
-    docker pull ${DOCKER_IMAGE}
+    $doit docker pull ${DOCKER_IMAGE}
     INFO "Docker version"
-    docker run --rm ${DOCKER_IMAGE} docker --version
+    $doit docker run --rm ${DOCKER_IMAGE} docker --version
 }
 function docker::prepare(){
-    docker volume create $(bb::volume_name docker)
-    docker run --privileged --name $(bb::container_name docker) -d -v $(bb::volume_name docker):/var/lib/docker ${DOCKER_IMAGE} \
+    $doit docker volume create $(bb::volume_name docker)
+    $doit docker run --privileged --name $(bb::container_name docker) -d -v $(bb::volume_name docker):/var/lib/docker ${DOCKER_IMAGE} \
            -s overlay2
 }
 function docker::build(){
     local dir="$1"
-    docker run -v ${dir}:/workspace -w /workspace --rm --link $(bb::container_name docker):docker -e DOCKER_HOST=tcp://docker:2375 ${DOCKER_IMAGE} \
+    $doit docker run -v ${dir}:/workspace -w /workspace --rm --link $(bb::container_name docker):docker -e DOCKER_HOST=tcp://docker:2375 ${DOCKER_IMAGE} \
            docker build -t foo -q . > /dev/null 2>&1
 }
 function docker::prune(){
-    docker rm -f $(bb::container_name docker)
-    docker volume rm -f $(bb::volume_name docker)
+    $doit docker rm -f $(bb::container_name docker)
+    $doit docker volume rm -f $(bb::volume_name docker)
 }
 
 ### BuildKit
 function buildkit::init(){
-    docker pull ${BUILDKIT_IMAGE}
+    $doit docker pull ${BUILDKIT_IMAGE}
     INFO "BuildKit version"
-    docker run --rm ${BUILDKIT_IMAGE} --version
+    $doit docker run --rm ${BUILDKIT_IMAGE} --version
 }
 function buildkit::prepare(){
-    docker volume create $(bb::volume_name buildkit)
-    docker run --privileged --name $(bb::container_name buildkit) -d -v $(bb::volume_name buildkit):/var/lib/buildkit -p 1234:1234 ${BUILDKIT_IMAGE} \
+    $doit docker volume create $(bb::volume_name buildkit)
+    $doit docker run --privileged --name $(bb::container_name buildkit) -d -v $(bb::volume_name buildkit):/var/lib/buildkit -p 1234:1234 ${BUILDKIT_IMAGE} \
            --addr tcp://0.0.0.0:1234
 }
 function buildkit::build(){
     local dir="$1"
-    docker run \
+    $doit docker run \
            -v ${dir}:/workspace -w /workspace \
            --rm \
            --link $(bb::container_name buildkit):buildkit \
@@ -111,60 +123,60 @@ function buildkit::build(){
            build --frontend=dockerfile.v0 --local context=. --local dockerfile=. > /dev/null 2>&1
 }
 function buildkit::prune(){
-    docker rm -f $(bb::container_name buildkit)
-    docker volume rm -f $(bb::volume_name buildkit)
+    $doit docker rm -f $(bb::container_name buildkit)
+    $doit docker volume rm -f $(bb::volume_name buildkit)
 }
 
 ### img
 function img::init(){
-    docker pull ${IMG_IMAGE}
+    $doit docker pull ${IMG_IMAGE}
     INFO "img version"
-    docker run --rm ${IMG_IMAGE} version
+    $doit docker run --rm ${IMG_IMAGE} version
 }
 function img::prepare(){
-    docker volume create $(bb::volume_name img)
+    $doit docker volume create $(bb::volume_name img)
 }
 function img::build(){
     local dir="$1"
     # drop stdout to avoid Travis 4MB log limit
-    docker run --privileged -v ${dir}:/workspace -w /workspace --rm -v $(bb::volume_name img):/home/user ${IMG_IMAGE} \
+    $doit docker run --privileged -v ${dir}:/workspace -w /workspace --rm -v $(bb::volume_name img):/home/user ${IMG_IMAGE} \
            build -backend overlayfs -t foo . > /dev/null 2>&1
 }
 function img::prune(){
-    docker volume rm -f $(bb::volume_name img)
+    $doit docker volume rm -f $(bb::volume_name img)
 }
 
 ### Buildah
 function buildah::init(){
-    docker pull ${BUILDAH_IMAGE}
+    $doit docker pull ${BUILDAH_IMAGE}
     INFO "Buildah version"
-    docker run --rm ${BUILDAH_IMAGE} buildah version
+    $doit docker run --rm ${BUILDAH_IMAGE} buildah version
 }
 function buildah::prepare(){
-    docker volume create $(bb::volume_name buildah)
+    $doit docker volume create $(bb::volume_name buildah)
 }
 function buildah::build(){
     local dir="$1"
-    docker run --privileged -v ${dir}:/workspace -w /workspace --rm -v $(bb::volume_name buildah):/var/lib/containers/storage ${BUILDAH_IMAGE} \
+    $doit docker run --privileged -v ${dir}:/workspace -w /workspace --rm -v $(bb::volume_name buildah):/var/lib/containers/storage ${BUILDAH_IMAGE} \
            buildah --storage-driver overlay bud -t foo -q . > /dev/null 2>&1
 }
 function buildah::prune(){
-    docker volume rm -f $(bb::volume_name buildah)
+    $doit docker volume rm -f $(bb::volume_name buildah)
 }
 
 ### kaniko
 function kaniko::init(){
-    docker pull ${KANIKO_IMAGE}
-    docker pull ${REGISTRY_IMAGE}
+    $doit docker pull ${KANIKO_IMAGE}
+    $doit docker pull ${REGISTRY_IMAGE}
     INFO "Kaniko version is unknown"
 }
 function kaniko::prepare(){
-    docker volume create $(bb::volume_name kaniko)
-    docker run --name $(bb::container_name kaniko-registry) -d -p 5000:5000 ${REGISTRY_IMAGE}
+    $doit docker volume create $(bb::volume_name kaniko)
+    $doit docker run --name $(bb::container_name kaniko-registry) -d -p 5000:5000 ${REGISTRY_IMAGE}
 }
 function kaniko::build(){
     local dir="$1"
-    docker run -v ${dir}:/workspace \
+    $doit docker run -v ${dir}:/workspace \
            -v $(bb::volume_name kaniko):/cache \
            --rm \
            --link $(bb::container_name kaniko-registry):kaniko-registry \
@@ -174,8 +186,8 @@ function kaniko::build(){
            --insecure-registry=kaniko-registry:5000 --destination=kaniko-registry:5000/foo #> /dev/null 2>&1
 }
 function kaniko::prune(){
-    docker rm -f $(bb::container_name kaniko-registry)
-    docker volume rm -f $(bb::volume_name kaniko)
+    $doit docker rm -f $(bb::container_name kaniko-registry)
+    $doit docker volume rm -f $(bb::volume_name kaniko)
 }
 
 ### Main
