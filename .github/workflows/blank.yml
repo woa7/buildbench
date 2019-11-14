@@ -1,14 +1,20 @@
 name: CI
 
 on: [push]
-
+    #name: ${{ matrix.name }}
+    #runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+if: runner.os == 'Linux'
+        run: |
+          apt-get update
+          apt-get install bc
 jobs:
   ONLY_DOCKER:
     runs-on: ${{ matrix.os }}
     strategy:
      matrix:
       os: [macos-latest, windows-latest, ubuntu-16.04, ubuntu-18.04]
-      #env: ONLY_DOCKER=1
     steps:
     - uses: actions/checkout@v1
     - name: git Actions
