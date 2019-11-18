@@ -1,4 +1,5 @@
-on: push
+name: Dump GitHub context Multi
+on: [push]
 
 jobs:
   Dump-GitHub-context-Multi:
