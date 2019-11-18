@@ -39,9 +39,9 @@ jobs:
 
     steps:
       if [ "${{ matrix.skiping }}" = "0" ]; then
-        - uses: actions/checkout@v1
-        with: 
-          submodules: recursive
+          - uses: actions/checkout@v1
+            with: 
+            submodules: recursive
         # Aside from running the tests we also make sure the examples don't
         # crash or return a non-zero exit code.
         - name: gpg-bash
