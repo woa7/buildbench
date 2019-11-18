@@ -3,16 +3,18 @@
 # https://github.com/adrienverge/ya
 # and https://github.com/ibiqlik/action-yamllint
 
+---
 extends: default
 
 rules:
   document-end:
-    level: warning
+    level: "warning"
   empty-values:
-    level: warning
+    level: "warning"
   key-ordering:
-    level: warning
+    level: "warning"
   octal-values:
-    level: warning
+    level: "warning"
   quoted-strings:
-    level: warning
+    level: "warning"
+...
