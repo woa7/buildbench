@@ -1,0 +1,65 @@
+name: CI
+
+on: [push]
+
+jobs:
+  ci:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+        # Github Actions requires a single row to be added to the build matrix.
+        # See https://help.github.com/en/articles/workflow-syntax-for-github-actions.
+        # see https://github.com/DaanDeMeyer/reproc/blob/master/.github/workflows/main.yml.
+        # see https://github.community/t5/GitHub-Actions/GitHub-Actions-Matrix-options-dont-work-as-documented/td-p/29558.
+        # see https://github.com/svenstaro/proxyboi/blob/master/.github/workflows/publish.yml.
+      matrix:
+        name: [
+          #ubuntu-18-gpg
+          #ubuntu-16-gpg,
+          #2016
+          ubuntu-gpg
+          windows-gpg
+          macos-gpg
+        ]
+        
+        include:
+          - name: ubuntu-gpg
+            #env: ONLY_BUILDKIT=1
+            os: ubuntu-18.04
+            #runversion: "BUILDKIT"
+            DOITPROG: "echo"
+            skiping: "0"
+          
+          - name: windows-gpg
+            env: ONLY_KANIKO=1
+            os: windows-latest
+            #runversion: "KANIKO"
+            DOITPROG: "echo"
+            skiping: "1"
+
+          - name: macos-DOCKER
+            os: macos-latest
+            runversion: "DOCKER"
+            DOITPROG: "echo"
+            skiping: "1"
+            
+    steps:
+      if [ "${{ matrix.skiping }}" = "0" ]; then
+        - uses: actions/checkout@v1
+          with: 
+            submodules: recursive
+
+        # Aside from running the tests we also make sure the examples don't
+        # crash or return a non-zero exit code.
+
+        - name: gpg-bash
+          shell: -bash
+          run: |
+            echo "gpg --version"
+            echo "gpgv --version"
+      else
+        - name: SKIPPED
+  	    run: echo SKIPPED
+      fi
