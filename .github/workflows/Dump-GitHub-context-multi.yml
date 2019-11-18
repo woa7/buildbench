@@ -4,6 +4,7 @@ jobs:
   one:
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
+    strategy:
       matrix:
         name: [
           ubuntu-18,
