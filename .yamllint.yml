@@ -4,6 +4,11 @@
 # and https://github.com/ibiqlik/action-yamllint
 
 ---
+yaml-files:
+  - '*.yaml'
+  - '*.yml'
+  - '.yamllint'
+
 extends: default
 
 rules:
