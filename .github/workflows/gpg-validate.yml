@@ -38,11 +38,11 @@ jobs:
             skiping: "1"
 
     steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: recursive
       if: ${{ matrix.skiping }}
       than:
-        - uses: actions/checkout@v1
-          with:
-            submodules: recursive
         # Aside from running the tests we also make sure the examples don't
         # crash or return a non-zero exit code.
         - name: gpg-bash
