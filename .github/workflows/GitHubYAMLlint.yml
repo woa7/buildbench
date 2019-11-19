@@ -10,7 +10,7 @@ jobs:
       with:
         #file_or_dir: ./**/*val*.yaml
         #file_or_dir: ./**/*.y?ml
-        file_or_dir: '$GITHUB_WORKSPACE/**/*.yml'
+        file_or_dir: .github/workflows/*.yml
         #config_file: .yamllint.yml
         config_data: .yamllint.yml
         #config_file: .github/workflows/.yamllint.yml
