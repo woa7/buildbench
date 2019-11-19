@@ -9,15 +9,19 @@ yaml-files:
   - '*.yml'
   - '.yamllint'
 
-extends: default
+extends: "default"
 
 rules:
+  line-length:
+    max: 160
+    level: "error"
   document-end:
     level: "warning"
   empty-values:
     level: "warning"
-  key-ordering:
-    level: "warning"
+  comments-indentation: "disable"
+#  key-ordering:
+#    level: "warning"
   octal-values:
     level: "warning"
   quoted-strings:
