@@ -127,5 +127,5 @@ jobs:
             ls -latr build/reproc++/examples/forward cmake --help > /dev/null
       else
         - name: SKIPPED
-  	    run: echo SKIPPED
+          run: echo SKIPPED
       fi
