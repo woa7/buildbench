@@ -36,14 +36,10 @@ jobs:
             os: macos-latest
             DOITPROG: "echo"
             skiping: "1"
-
+# if: ${{ matrix.skiping }} ; then
     steps:
-      if: ${{ matrix.skiping }} ; then
+    if: matrix.skiping == 'yes' || matrix.skiping == 'unassigned'
         uses: actions/checkout@v1
-        with:
-          submodules: recursive
-        # Aside from running the tests we also make sure the examples don't
-        # crash or return a non-zero exit code.
         - name: gpg-bash
           shell: -bash
           run: |
