@@ -38,8 +38,7 @@ jobs:
             skiping: "1"
 
     steps:
-      if: ${{ matrix.skiping }}
-      than:
+      if: ${{ matrix.skiping }} ; then
         uses: actions/checkout@v1
         with:
           submodules: recursive
