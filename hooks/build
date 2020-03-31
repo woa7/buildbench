@@ -1,7 +1,13 @@
 #!/bin/bash
-set
-env
-ls -latr
+#set
+#env
+#ls -latr
+export DOCKER_CLI_EXPERIMENTAL=enabled
+( mkdir $HOME/.docker/ ; true ) && echo $'{\n    "experimental": "enabled"\n}' | tee -a $HOME/.docker/config.json
+#WORKGING with 19.03.8 
+cat $HOME/.docker/config.json
+docker info
+docker buildx inspect --bootstrap
 docker build --build-arg -f $DOCKERFILE_PATH -t $IMAGE_NAME .
 # see https://docs.docker.com/docker-hub/builds/advanced/#custom-build-phase-hooks
 # docker build --build-arg CUSTOM=$VAR -f $DOCKERFILE_PATH -t $IMAGE_NAME .
