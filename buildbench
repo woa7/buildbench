@@ -207,6 +207,9 @@ if [ "$#" -ne 3 ]; then
     exit 1
 fi
 DIR=$(realpath "$1")
+     D=`dirname "$relpath"`
+     B=`basename "$relpath"`
+     abspath="`cd \"$D\" 2>/dev/null && pwd || echo \"$D\"`/$B"
 CSV="$2"
 N="$3"
 builders=(docker buildkit img buildah kaniko)
